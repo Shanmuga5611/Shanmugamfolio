@@ -9,6 +9,7 @@ import Contact from './components/Contact'
 
 function App() {
   const [loading, setLoading] = useState(true)
+  
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 500)
