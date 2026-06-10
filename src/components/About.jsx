@@ -18,7 +18,7 @@ function About() {
             <h4>Professional Summary</h4>
             <ul>
               {/* <li>2.10+ years of experience in business process analysis</li> */}
-              <li>Expert in ASP.NET MVC, C#, VB.NET, JavaScript, jQuery</li>
+              <li>Expert in ASP.NET MVC, C#, VB.NET,VB6, JavaScript, jQuery</li>
               <li>Strong OOPs concepts and database management</li>
               <li>Effective team communicator and mentor</li>
             </ul>
@@ -30,7 +30,7 @@ function About() {
             <ul>
               <li>Full-stack development with .NET technologies</li>
               <li>Database: MSSQL, PostgreSQL, Oracle SQL</li>
-              <li>Frontend: HTML, CSS, JavaScript, jQuery, AJAX</li>
+              <li>Frontend: HTML, CSS,Bootstrap 5, JavaScript, jQuery, AJAX</li>
               <li>Version Control & Agile methodologies</li>
             </ul>
           </div>
