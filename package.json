@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://github.com/Shanmuga5611/ShanmugamPortfolio",
+  "homepage": "https://github.com/Shanmuga5611/Shanmugamfolio",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
