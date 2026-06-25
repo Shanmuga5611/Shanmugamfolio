@@ -1,7 +1,6 @@
-// App.jsx - Colorful Animated Design with Submenus
+// App.jsx - Colorful Animated Design with Responsive Submenus
 import { useState, useEffect } from 'react'
 import './App.css'
-import Header from './components/Header'
 import About from './components/About'
 import Skills from './components/Skills'
 import Projects from './components/Projects'
@@ -42,15 +41,25 @@ function App() {
       })
     }
     
+    // Close mobile menu on resize to desktop
+    const handleResize = () => {
+      if (window.innerWidth > 768 && mobileMenuOpen) {
+        setMobileMenuOpen(false)
+        setActiveDropdown(null)
+      }
+    }
+    
     window.addEventListener('scroll', handleScroll)
     window.addEventListener('scroll', handleScrollReveal)
+    window.addEventListener('resize', handleResize)
     handleScrollReveal()
     
     return () => {
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('scroll', handleScrollReveal)
+      window.removeEventListener('resize', handleResize)
     }
-  }, [])
+  }, [mobileMenuOpen])
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId)
@@ -65,14 +74,23 @@ function App() {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown)
   }
 
+  // Close mobile menu when clicking outside
+  const handleOverlayClick = () => {
+    setMobileMenuOpen(false)
+    setActiveDropdown(null)
+  }
+
   if (loading) {
     return <div className="loader"></div>
   }
 
   return (
     <div className="app-container">
+      {/* Mobile Overlay */}
+      {mobileMenuOpen && <div className="mobile-overlay" onClick={handleOverlayClick}></div>}
+      
       {/* Header with Navigation and Submenus */}
-      <header className={scrolled ? 'scrolled' : ''}>
+      <header className={`${scrolled ? 'scrolled' : ''} ${mobileMenuOpen ? 'mobile-open' : ''}`}>
         <div className="header-content">
           <div className="profile-section">
             <div className="profile-icon">
@@ -84,18 +102,28 @@ function App() {
             </div>
           </div>
           
-          <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            ☰
+          <button 
+            className={`mobile-menu-btn ${mobileMenuOpen ? 'active' : ''}`} 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
           </button>
           
-          <nav className="nav-container">
+          <nav className={`nav-container ${mobileMenuOpen ? 'active' : ''}`}>
             <ul className={`nav-menu ${mobileMenuOpen ? 'active' : ''}`}>
               {/* Home Dropdown */}
-              <li className="nav-item">
+              <li className={`nav-item ${activeDropdown === 'home' ? 'active' : ''}`}>
                 <span className="nav-link" onClick={() => scrollToSection('home')}>
-                  Home <span className="dropdown-icon">▼</span>
+                  Home 
+                  <span className="dropdown-icon" onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDropdown('home');
+                  }}>▼</span>
                 </span>
-                <ul className="submenu">
+                <ul className={`submenu ${activeDropdown === 'home' ? 'active' : ''}`}>
                   <li><a onClick={() => scrollToSection('home')}>Introduction</a></li>
                   <li><a onClick={() => scrollToSection('about')}>Profile Overview</a></li>
                   <li><a onClick={() => scrollToSection('skills')}>Tech Stack</a></li>
@@ -103,11 +131,15 @@ function App() {
               </li>
               
               {/* About Dropdown */}
-              <li className="nav-item">
+              <li className={`nav-item ${activeDropdown === 'about' ? 'active' : ''}`}>
                 <span className="nav-link" onClick={() => scrollToSection('about')}>
-                  About <span className="dropdown-icon">▼</span>
+                  About 
+                  <span className="dropdown-icon" onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDropdown('about');
+                  }}>▼</span>
                 </span>
-                <ul className="submenu">
+                <ul className={`submenu ${activeDropdown === 'about' ? 'active' : ''}`}>
                   <li><a onClick={() => scrollToSection('about')}>Who Am I</a></li>
                   <li><a onClick={() => scrollToSection('skills')}>What I Do</a></li>
                   <li><a onClick={() => scrollToSection('experience')}>Work Philosophy</a></li>
@@ -115,11 +147,15 @@ function App() {
               </li>
               
               {/* Projects Dropdown */}
-              <li className="nav-item">
+              <li className={`nav-item ${activeDropdown === 'projects' ? 'active' : ''}`}>
                 <span className="nav-link" onClick={() => scrollToSection('projects')}>
-                  Projects <span className="dropdown-icon">▼</span>
+                  Projects 
+                  <span className="dropdown-icon" onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDropdown('projects');
+                  }}>▼</span>
                 </span>
-                <ul className="submenu">
+                <ul className={`submenu ${activeDropdown === 'projects' ? 'active' : ''}`}>
                   <li><a onClick={() => scrollToSection('projects')}>ERP Applications</a></li>
                   <li><a onClick={() => scrollToSection('projects')}>Web Development</a></li>
                   <li><a onClick={() => scrollToSection('projects')}>E-Commerce</a></li>
@@ -127,11 +163,15 @@ function App() {
               </li>
               
               {/* Experience Dropdown */}
-              <li className="nav-item">
+              <li className={`nav-item ${activeDropdown === 'experience' ? 'active' : ''}`}>
                 <span className="nav-link" onClick={() => scrollToSection('experience')}>
-                  Experience <span className="dropdown-icon">▼</span>
+                  Experience 
+                  <span className="dropdown-icon" onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDropdown('experience');
+                  }}>▼</span>
                 </span>
-                <ul className="submenu">
+                <ul className={`submenu ${activeDropdown === 'experience' ? 'active' : ''}`}>
                   <li><a onClick={() => scrollToSection('experience')}>Current Role</a></li>
                   <li><a onClick={() => scrollToSection('experience')}>Previous Jobs</a></li>
                   <li><a onClick={() => scrollToSection('experience')}>Achievements</a></li>
@@ -139,19 +179,23 @@ function App() {
               </li>
               
               {/* Contact Dropdown */}
-              <li className="nav-item">
+              <li className={`nav-item ${activeDropdown === 'contact' ? 'active' : ''}`}>
                 <span className="nav-link" onClick={() => scrollToSection('contact')}>
-                  Contact <span className="dropdown-icon">▼</span>
+                  Contact 
+                  <span className="dropdown-icon" onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDropdown('contact');
+                  }}>▼</span>
                 </span>
-                <ul className="submenu">
+                <ul className={`submenu ${activeDropdown === 'contact' ? 'active' : ''}`}>
                   <li><a onClick={() => scrollToSection('contact')}>Get In Touch</a></li>
                   <li><a onClick={() => scrollToSection('contact')}>Social Media</a></li>
                   <li><a onClick={() => scrollToSection('contact')}>Resume</a></li>
                 </ul>
               </li>
               
-              <li>
-                <button className="resume-btn" onClick={() => window.open('#', '_blank')}>
+              <li className="resume-item">
+                <button className="resume-btn" onClick={() => window.open('https://drive.google.com/file/d/1R6ijd7ZsA8kGGgL44H-616V9zlLGV_oi/view?usp=drive_link', '_blank')}>
                   📄 Resume
                 </button>
               </li>
@@ -204,7 +248,7 @@ function App() {
         
         <section id="contact">
           <Contact />
-        </section>
+        </section> 
       </main>
 
       {/* Back to Top Button */}
